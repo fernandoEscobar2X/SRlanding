@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Santiago Reyes | SR Studio Salon</title>
+  <meta name="theme-color" content="#121212">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* --- VARIABLES (TEMA OSCURO CLEAN) --- */
+    :root {
+      --bg-color: #121212;
+      --text-primary: #ffffff;
+      --text-secondary: #bbbbbb;
+      --btn-bg: #ffffff;
+      --btn-text: #121212;
+      --outline-border: #333333;
+      --icon-color: #ffffff;
+      --noise-opacity: 0.04; /* Textura muy sutil */
+    }
+
+    /* --- BASE --- */
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-color); 
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem 1.5rem;
+      -webkit-font-smoothing: antialiased;
+      position: relative;
+    }
+
+    /* --- TEXTURA DE FONDO --- */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='1'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: -1;
+      opacity: var(--noise-opacity);
+    }
+    
+    /* --- TARJETA --- */
+    .card {
+      width: 100%;
+      max-width: 340px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+    
+    /* --- LOGO CLEAN --- */
+    .logo {
+      width: 240px;
+      height: 240px;
+      margin-bottom: 1.5rem;
+      border-radius: 50%; /* Fuerza la forma circular */
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      /* Animación de entrada sutil */
+      opacity: 0;
+      animation: fadeDown 0.8s ease-out forwards;
+    }
+    
+    .logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      /* SIN FILTROS EXTRAÑOS, se espera logo limpio */
+    }
+    
+    /* --- INFO --- */
+    .content-wrapper {
+      width: 100%;
+      opacity: 0;
+      animation: fadeUp 0.8s ease-out 0.2s forwards;
+    }
+
+    .info {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+      margin-bottom: 2rem;
+    }
+    
+    .info-item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.7rem;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      font-weight: 300;
+      letter-spacing: 0.03em;
+    }
+    
+    .info-item svg {
+      width: 16px;
+      height: 16px;
+      color: var(--icon-color);
+      stroke-width: 1px;
+    }
+    
+    /* --- BOTONES OPTIMIZADOS --- */
+    .buttons-row {
+      display: flex;
+      gap: 0.7rem;
+      width: 100%;
+      margin-bottom: 0.7rem; /* Espacio entre filas de botones */
+    }
+    
+    .btn {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      /* Botones más delgados y elegantes */
+      padding: 0.8rem 0.5rem;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border-radius: 2px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .btn svg { width: 14px; height: 14px; }
+    
+    .btn-white {
+      background: var(--btn-bg);
+      color: var(--btn-text);
+      border: 1px solid var(--btn-bg);
+    }
+    
+    .btn-outline {
+      background: transparent;
+      color: var(--text-primary);
+      border: 1px solid var(--outline-border);
+    }
+
+    .btn-full {
+        width: 100%;
+    }
+    
+    .btn:active { transform: translateY(1px); opacity: 0.9; }
+    
+    /* --- REDES SOCIALES --- */
+    .social {
+      display: flex;
+      gap: 1rem;
+      margin: 1.5rem 0;
+      justify-content: center;
+    }
+    
+    .social-link {
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--outline-border);
+      color: var(--text-primary);
+      border-radius: 50%;
+      transition: all 0.3s ease;
+    }
+    
+    .social-link:active {
+      background: var(--text-primary);
+      color: var(--bg-color);
+      border-color: var(--text-primary);
+    }
+    
+    .social-link svg { width: 18px; height: 18px; stroke-width: 1.5px; }
+    
+    .footer {
+      margin-top: 2rem;
+      font-size: 0.6rem;
+      color: var(--text-secondary);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      opacity: 0.7;
+    }
+    .footer a { color: var(--text-secondary); text-decoration: none; }
+
+    /* --- ANIMACIONES --- */
+    @keyframes fadeDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <div class="logo">
+      <img src="logo-sr-black.png" alt="SR Studio Salon">
+    </div>
+    
+    <div class="content-wrapper">
+      <div class="info">
+        <div class="info-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          <span>+52 664 815 7290</span>
+        </div>
+        <div class="info-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span>Mar - Sab: 8:00 AM - 5:00 PM</span>
+        </div>
+        <div class="info-item" style="text-align: center;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <span>Durango 2889, Col. Madero (Cacho),<br>22040 Tijuana, B.C.</span>
+        </div>
+      </div>
+      
+      <div class="buttons-row">
+        <a href="https://wa.me/526648157290" class="btn btn-white" target="_blank">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/></svg>
+          WhatsApp
+        </a>
+        <a href="tel:+526648157290" class="btn btn-outline">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          Llamar
+        </a>
+      </div>
+
+      <div class="social">
+        <a href="https://www.instagram.com/srstudiosalon" target="_blank" class="social-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+        </a>
+        <a href="https://maps.app.goo.gl/ioGuYozx8kASXQtw6" target="_blank" class="social-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        </a>
+      </div>
+
+      <div class="buttons-row">
+        <button class="btn btn-outline" onclick="downloadVCard()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Guardar contacto
+        </button>
+      </div>
+      <div class="buttons-row">
+        <button class="btn btn-outline" onclick="downloadCardImage()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Descargar Tarjeta
+          </button>
+      </div>
+      
+      <div class="footer">
+        Diseño por <a href="https://mxvisible.netlify.app" target="_blank">VisibleMX</a>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    function downloadVCard() {
+      const vcard = `BEGIN:VCARD
+VERSION:3.0
+FN:Santiago Reyes
+N:Reyes;Santiago;;;
+ORG:SR Studio Salon
+TITLE:Hair Stylist
+TEL;TYPE=CELL:+526648157290
+URL:https://www.instagram.com/srstudiosalon
+ADR;TYPE=WORK:;;Tijuana;Baja California;;México
+END:VCARD`;
+      const blob = new Blob([vcard], { type: 'text/vcard' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'Santiago_Reyes.vcf';
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function downloadCardImage() {
+      const link = document.createElement('a');
+      // AQUÍ ESTÁ EL CAMBIO: Se usa 'tarjetaImg.jpg'
+      // Asegúrate de que la imagen tenga la extensión correcta (.jpg o .png)
+      link.href = 'tarjetaImg.png'; 
+      link.download = 'Santiago_Reyes_Tarjeta.png';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  </script>
+</body>
+</html>
