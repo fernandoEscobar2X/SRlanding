@@ -1,34 +1,48 @@
-# Netlify Configuration
-# Optimización y headers de seguridad para SR Studio Salon
+# Netlify Configuration - SR Studio Salon
+# Headers de cache optimizados para evitar problemas de versiones mezcladas
 
-# Build settings
 [build]
   publish = "."
-  command = "echo 'No build needed - static site'"
+  command = "echo 'Static site'"
 
-# Headers de seguridad
+# =============================================
+# ORDEN IMPORTANTE: Reglas específicas PRIMERO
+# =============================================
+
+# 1. HTML y raíz - NUNCA cachear (siempre verificar servidor)
 [[headers]]
-  for = "/*"
+  for = "/"
   [headers.values]
-    # Seguridad
+    Cache-Control = "no-cache, no-store, must-revalidate"
     X-Frame-Options = "DENY"
     X-Content-Type-Options = "nosniff"
     X-XSS-Protection = "1; mode=block"
     Referrer-Policy = "strict-origin-when-cross-origin"
-    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
-    
-    # Performance
-    Cache-Control = "public, max-age=31536000, immutable"
 
-# Cache específico para HTML (menos agresivo)
 [[headers]]
   for = "/*.html"
   [headers.values]
-    Cache-Control = "public, max-age=0, must-revalidate"
+    Cache-Control = "no-cache, no-store, must-revalidate"
 
-# Cache para CSS y JS
+[[headers]]
+  for = "/index.html"
+  [headers.values]
+    Cache-Control = "no-cache, no-store, must-revalidate"
+
+# 2. CSS - Cache largo (query string ?v=X invalida)
+[[headers]]
+  for = "/css/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
 [[headers]]
   for = "/*.css"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# 3. JS - Cache largo (query string ?v=X invalida)
+[[headers]]
+  for = "/js/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
 
@@ -37,7 +51,17 @@
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
 
-# Cache para imágenes
+# 4. Imágenes y videos - Cache largo
+[[headers]]
+  for = "/resources/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.jpeg"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
 [[headers]]
   for = "/*.jpg"
   [headers.values]
@@ -54,33 +78,35 @@
     Cache-Control = "public, max-age=31536000, immutable"
 
 [[headers]]
+  for = "/*.mp4"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
   for = "/*.svg"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
 
-# Redirects (si es necesario)
+# 5. Fonts
+[[headers]]
+  for = "/*.woff2"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.woff"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# 6. Seguridad global (SIN Cache-Control para no conflictar)
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+
+# Redirects
 [[redirects]]
   from = "/whatsapp"
-  to = "https://wa.me/52228XXXXXXX?text=Hola,%20me%20gustaría%20agendar%20una%20cita"
+  to = "https://wa.me/526648157290?text=Hola,%20me%20gustaría%20agendar%20una%20cita"
   status = 301
   force = true
-
-# Redirect de www a non-www (si aplica)
-# [[redirects]]
-#   from = "https://www.srstudiosalon.com/*"
-#   to = "https://srstudiosalon.com/:splat"
-#   status = 301
-#   force = true
-
-# 404 personalizado (opcional)
-# [[redirects]]
-#   from = "/*"
-#   to = "/404.html"
-#   status = 404
-
-# Plugin de optimización de imágenes (opcional pero recomendado)
-[[plugins]]
-  package = "@netlify/plugin-lighthouse"
-
-# Form handling (Netlify Forms)
-# No requiere configuración adicional, se detecta automáticamente
