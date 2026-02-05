@@ -6,14 +6,14 @@
 // === DATOS DEL CATÁLOGO ===
 const CATALOG = {
   color: [
-    { type: 'video', src: 'resources/vid3.mp4', label: 'Rubio Champagne' },
-    { type: 'video', src: 'resources/vid11.mp4', label: 'Color Fantasía' },
-    { type: 'video', src: 'resources/vid12.mp4', label: 'Pelirrojo Intenso' },
-    { type: 'image', src: 'resources/foto5.jpeg', label: 'Cobrizo Natural' }
+    { type: 'video', src: 'resources/vid3.mp4', label: 'Rubio Champagne', poster: 'resources/posters/vid3.webp' },
+    { type: 'video', src: 'resources/vid11.mp4', label: 'Color Fantasía', poster: 'resources/posters/vid11.webp' },
+    { type: 'video', src: 'resources/vid12.mp4', label: 'Pelirrojo Intenso', poster: 'resources/posters/vid12.webp' },
+    { type: 'image', src: 'resources/foto5_1_11zon.webp', label: 'Cobrizo Natural' }
   ],
   peinados: [
-    { type: 'video', src: 'resources/vid5.mp4', label: 'Ondas Naturales' },
-    { type: 'image', src: 'resources/foto6.jpeg', label: 'Glamour' }
+    { type: 'video', src: 'resources/vid5.mp4', label: 'Ondas Naturales', poster: 'resources/posters/vid5.webp' },
+    { type: 'image', src: 'resources/foto6_2_11zon.webp', label: 'Glamour' }
   ]
 };
 
@@ -67,7 +67,10 @@ function createCatalogItem(item) {
     video.loop = true;
     video.playsInline = true;
     video.preload = 'metadata';
-    video.poster = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 9'%3E%3Crect fill='%23222'/%3E%3C/svg%3E";
+
+    // ✅ ÚNICO CAMBIO: usar poster del catálogo (si no existe, fallback negro)
+    video.poster = item.poster || "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 9'%3E%3Crect fill='%23222'/%3E%3C/svg%3E";
+
     div.appendChild(video);
     
     // Play icon
