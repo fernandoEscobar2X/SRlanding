@@ -979,3 +979,58 @@
 .gallery-grid.stagger-children > .gallery-item {
   transition: opacity var(--transition-slow), transform var(--transition-slow);
 }
+/* === UI PREMIUM (AGREGAR AL FINAL) === */
+
+/* 1. Preloader: Entrada Cinematográfica */
+.preloader {
+  position: fixed;
+  inset: 0;
+  background-color: var(--color-black); /* Usa tu variable existente */
+  z-index: 9999; /* Encima de todo */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 0.8s cubic-bezier(0.7, 0, 0.3, 1); /* Easing sofisticado */
+}
+
+.preloader.is-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.preloader-logo {
+  font-family: var(--font-display);
+  color: var(--color-white);
+  font-size: 3rem; /* O usa var(--text-4xl) */
+  letter-spacing: 0.15em;
+  opacity: 0; 
+  /* La animación de entrada se hará con JS */
+}
+
+/* 2. Custom Cursor: El toque de "Diseño" */
+/* Solo se activa en Desktop para no molestar en móvil */
+@media (min-width: 1024px) {
+  body, a, button, .catalog-item {
+    cursor: none; /* Ocultamos la flecha aburrida */
+  }
+
+  .custom-cursor {
+    position: fixed;
+    top: 0; left: 0;
+    width: 20px; height: 20px;
+    background-color: var(--color-white);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 10000;
+    mix-blend-mode: difference; /* Esto invierte el color (Blanco en fondo negro, Negro en fondo blanco) */
+    transform: translate(-50%, -50%);
+    transition: width 0.3s ease, height 0.3s ease;
+  }
+
+  /* Cuando haces hover en algo clickeable */
+  .custom-cursor.is-hovering {
+    width: 50px;
+    height: 50px;
+    opacity: 0.5;
+  }
+}

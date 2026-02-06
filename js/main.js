@@ -6,14 +6,16 @@
 // === DATOS DEL CATÁLOGO ===
 const CATALOG = {
   color: [
-    { type: 'video', src: 'resources/vid3.mp4', label: 'Rubio Champagne', poster: 'resources/posters/vid3.webp' },
-    { type: 'video', src: 'resources/vid11.mp4', label: 'Color Fantasía', poster: 'resources/posters/vid11.webp' },
-    { type: 'video', src: 'resources/vid12.mp4', label: 'Pelirrojo Intenso', poster: 'resources/posters/vid12.webp' },
-    { type: 'image', src: 'resources/foto5_1_11zon.webp', label: 'Cobrizo Natural' }
+    { type: 'video', src: 'resources/vid3.mp4',  poster: 'resources/posters/vid3.webp' },
+    { type: 'video', src: 'resources/vid11.mp4',  poster: 'resources/posters/vid11.webp' },
+    { type: 'video', src: 'resources/vid12.mp4', poster: 'resources/posters/vid12.webp' },
+    { type: 'image', src: 'resources/foto5_1_11zon.webp' }
   ],
   peinados: [
-    { type: 'video', src: 'resources/vid5.mp4', label: 'Ondas Naturales', poster: 'resources/posters/vid5.webp' },
-    { type: 'image', src: 'resources/foto6_2_11zon.webp', label: 'Glamour' }
+    { type: 'video', src: 'resources/vid5.mp4', poster: 'resources/posters/vid5.webp' },
+     { type: 'video', src: 'resources/peinado1.mp4', poster: 'resources/posters/peinado1.webp' },
+  { type: 'video', src: 'resources/peinado2.mp4', poster: 'resources/posters/peinado2.webp' },
+  { type: 'video', src: 'resources/peinado3.mp4', poster: 'resources/posters/peinado3.webp' }
   ]
 };
 
@@ -124,13 +126,20 @@ function createCatalogItem(item) {
   }
   
   // Overlay con label
+   // Overlay con label (solo si existe)
   const overlay = document.createElement('div');
   overlay.className = 'catalog-item-overlay';
-  overlay.innerHTML = `<span class="catalog-item-label">${item.label}</span>`;
+
+  if (item.label) {
+    overlay.innerHTML = `<span class="catalog-item-label">${item.label}</span>`;
+  }
+
   div.appendChild(overlay);
-  
+
   return div;
 }
+
+
 
 // === ANIMACIONES SCROLL ===
 function initScrollAnimations() {
@@ -254,8 +263,104 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
   });
 });
 
+
 // === INIT ===
 document.addEventListener('DOMContentLoaded', () => {
+  // --- 1. PRELOADER (GSAP) ---
+ const preloader = document.getElementById("preloader");
+  const preloaderLogo = document.querySelector(".preloader-logo");
+
+  if (preloader && preloaderLogo) {
+    // 1. El logo aparece rápido
+    gsap.to(preloaderLogo, {
+      opacity: 1,
+      y: 0,
+      duration: 0.4, // Antes 1.0 (Más rápido)
+      ease: "power2.out",
+      onComplete: () => {
+        // 2. El fondo negro desaparece casi de inmediato
+        gsap.to(preloader, {
+          opacity: 0,
+          duration: 0.4, // Antes 0.8 (Más rápido)
+          delay: 0.1,    // Antes 0.3 (Mínima pausa)
+          ease: "power2.inOut",
+          onComplete: () => {
+            preloader.classList.add("is-hidden");
+            animateHeroEntrance(); // Iniciar animaciones del hero
+          }
+        });
+      }
+    });
+  } else {
+    // Fallback por seguridad
+    animateHeroEntrance();
+  }
+
+  // -- Lenis Smooth Scroll --
+  // Configurado para sentirse fluido pero responsivo
+  const lenis = new Lenis({
+    duration: 1.2,
+    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    orientation: 'vertical',
+    gestureDirection: 'vertical',
+    smoothWheel: true,
+    wheelMultiplier: 1,
+    touchMultiplier: 2,
+  });
+
+  function raf(time) {
+    lenis.raf(time);
+    requestAnimationFrame(raf);
+  }
+  requestAnimationFrame(raf);
+
+  // -- Custom Cursor & Magnetic (Solo Desktop) --
+  if (window.matchMedia("(min-width: 1024px)").matches) {
+    const cursor = document.getElementById("customCursor");
+    const magneticElements = document.querySelectorAll("[data-magnetic]");
+
+    if (cursor) {
+      // Movimiento del cursor
+      window.addEventListener("mousemove", (e) => {
+        gsap.to(cursor, {
+          x: e.clientX,
+          y: e.clientY,
+          duration: 0.1, // Muy reactivo
+          ease: "power2.out"
+        });
+      });
+
+      // Efecto Click
+      window.addEventListener("mousedown", () => cursor.classList.add("is-clicking"));
+      window.addEventListener("mouseup", () => cursor.classList.remove("is-clicking"));
+
+      // Efecto Magnético en botones
+      magneticElements.forEach((el) => {
+        el.addEventListener("mouseenter", () => {
+          cursor.classList.add("is-hovering");
+          gsap.to(el, { scale: 0.95, duration: 0.3 });
+        });
+
+        el.addEventListener("mouseleave", () => {
+          cursor.classList.remove("is-hovering");
+          gsap.to(el, { x: 0, y: 0, scale: 1, duration: 0.5, ease: "elastic.out(1, 0.3)" });
+        });
+
+        el.addEventListener("mousemove", (e) => {
+          const rect = el.getBoundingClientRect();
+          const x = e.clientX - rect.left - rect.width / 2;
+          const y = e.clientY - rect.top - rect.height / 2;
+          
+          gsap.to(el, {
+            x: x * 0.3,
+            y: y * 0.3,
+            duration: 0.3,
+            ease: "power2.out"
+          });
+        });
+      });
+    }
+  }
   loadCatalog();
   initScrollAnimations();
   initFloatingCta();
