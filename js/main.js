@@ -365,7 +365,48 @@ document.addEventListener('DOMContentLoaded', () => {
   initScrollAnimations();
   initFloatingCta();
   initGalleryVideos();
+  initMarquee(); // Marquee suave con GSAP
   
   console.log('%cSR Studio Salon', 'font-size:20px;font-weight:bold;color:#000');
   console.log('%cby VisibleMX', 'font-size:12px;color:#666');
 });
+
+// === MARQUEE INFINITO CON GSAP ===
+function initMarquee() {
+  const track = document.querySelector('.marquee-track');
+  if (!track) return;
+  
+  const content = track.querySelector('.marquee-content');
+  if (!content) return;
+  
+  // Clonar contenido para loop infinito
+  const clone = content.cloneNode(true);
+  track.appendChild(clone);
+  
+  // Calcular ancho de un bloque de contenido
+  const contentWidth = content.offsetWidth;
+  
+  // Velocidad: pixels por segundo (más bajo = más lento y suave)
+  const speed = 50; // Ajustar según preferencia
+  const duration = contentWidth / speed;
+  
+  // Animación con GSAP - súper suave
+  gsap.to(track, {
+    x: -contentWidth,
+    duration: duration,
+    ease: "none", // Linear para movimiento constante
+    repeat: -1, // Infinito
+    modifiers: {
+      x: gsap.utils.unitize(x => parseFloat(x) % contentWidth) // Loop seamless
+    }
+  });
+  
+  // Pausar al hover
+  track.addEventListener('mouseenter', () => {
+    gsap.to(track, { timeScale: 0, duration: 0.5 });
+  });
+  
+  track.addEventListener('mouseleave', () => {
+    gsap.to(track, { timeScale: 1, duration: 0.5 });
+  });
+}
